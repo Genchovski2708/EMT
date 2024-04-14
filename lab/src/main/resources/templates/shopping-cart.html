@@ -1,0 +1,46 @@
+<div class="container">
+  <h1 class="jumbotron-heading">CINEMA TICKETS</h1>
+  <h3 class="jumbotron-heading">All tickets in shopping cart:</h3>
+</div>
+</section>
+
+<div class="container mb-4">
+  <div class="row">
+    <div class="col-12" th:if="${ticketOrders!=null}">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Number of tickets</th>
+            <th scope="col">Date created:</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="ticketOrder : ${ticketOrders}">
+            <td th:text="${ticketOrder.movieTitle}"></td>
+            <td th:text="${ticketOrder.numberOfTickets}"></td>
+            <td th:text="${ticketOrder.timeStamp}"></td></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <form method="post" th:action="@{/shopping-cart}">
+    <label for="from">Start Date and Time:</label>
+    <input type="datetime-local" id="from" name="from" required>
+
+    <br>
+
+    <label for="to">End Date and Time:</label>
+    <input type="datetime-local" id=to name="to" required>
+
+    <br>
+
+    <input class="btn btn-success my-2" type="submit" value="Search">
+  </form>
+  <a class="btn btn-primary" th:href="@{'/movies'}">Home Page</a>
+</div>
+
+</div>

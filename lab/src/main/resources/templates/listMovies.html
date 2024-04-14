@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket Order page - Welcome and choose a Movie</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        header {
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1 class="text-center">Welcome to our Movie Ticket Shop App</h1>
+</header>
+<main>
+    <form method="get" action="/movies">
+        <h2>Search movie:</h2>
+        <div class="form-group">
+            <label for="searchText">Text:</label>
+            <input type="text" class="form-control" id="searchText" name="search">
+        </div>
+        <div class="form-group">
+            <label for="ratingInput">Rating:</label>
+            <input type="number" class="form-control" id="ratingInput" name="rating" step="0.1" min="1.0" max="10">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <form method="post" action="/ticketOrder">
+        <h2>Choose movie:</h2>
+        <ul>
+            <!-- Loop through movies -->
+            <li th:each="movie, iterStat : ${movieList}">
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="selectedMovie"
+                           th:value="${movie.getTitle()}" th:id="${'movie-' + movie.getId()}"
+                           th:checked="${iterStat.index == 0}">
+                    <label class="form-check-label" th:for="${'movie-' + movie.getId()}">
+                        <strong>Title:</strong> <span th:text="${movie.getTitle()}"></span>,
+                        <strong>Summary:</strong> <span th:text="${movie.getSummary()}"></span>,
+                        <strong>Rating:</strong> <span th:text="${movie.getRating()}"></span>,
+                        <strong>Production:</strong> <span th:text="${movie.getProduction().getName()}"></span>
+                    </label>
+                    <a class="btn btn-primary" th:href="@{'/movies/edit-form/' + ${movie.id}}">Edit</a>
+                    <a class="btn btn-danger" th:href="@{/movies/delete/{id} (id=${movie.getId()})}">Delete</a>
+                </div>
+            </li>
+        </ul>
+        <h2>Choose number of tickets:</h2>
+        <input type="number" class="form-control" name="numTickets" min="1" max="15">
+
+        <h2>Set price:</h2>
+        <input type="number" class="form-control" name="price" min="0">
+
+        <h2>Set date and time for price range:</h2>
+        <label for="priceFrom">From:</label>
+        <input type="datetime-local" class="form-control" id="priceFrom" name="priceFrom" required="">
+        <label for="priceTo">To:</label>
+        <input type="datetime-local" class="form-control" id="priceTo" name="priceTo" required="">
+
+        <h2>Set date and time:</h2>
+        <input type="datetime-local" class="form-control" id="timeStamp" name="timeStamp"
+               th:value="${currentDateTime}" required="">
+        <button type="submit" class="btn btn-primary mt-2">Add to Cart</button>
+    </form>
+    <form method="get" action="/shopping-cart">
+        <button type="submit" class="btn btn-secondary">View Shopping Cart</button>
+    </form>
+    <a th:href="@{/movies/add-form}" class="btn btn-info">
+        <i>Add new movie</i>
+    </a>
+    <!-- Logout button -->
+    <form class="mt-2" action="/logout" method="get">
+        <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+
+</main>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
