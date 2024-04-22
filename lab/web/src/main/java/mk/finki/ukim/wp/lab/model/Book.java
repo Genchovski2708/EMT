@@ -15,7 +15,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @ManyToOne
+    @ManyToOne()
     private Author author;
     private Integer availableCopies;
 

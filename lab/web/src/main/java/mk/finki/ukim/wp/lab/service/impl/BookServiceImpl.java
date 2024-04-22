@@ -7,6 +7,7 @@ import mk.finki.ukim.wp.lab.model.exceptions.BookNotFoundException;
 import mk.finki.ukim.wp.lab.repository.jpa.BookRepository;
 import mk.finki.ukim.wp.lab.service.AuthorService;
 import mk.finki.ukim.wp.lab.service.BookService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> listAll() {
-        return bookRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        return bookRepository.findAll(sort);
     }
 
     @Override
@@ -62,7 +64,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public Optional<Book> lowerAvailableCopies(Long id) {
         Book book = this.findById(id).get();
-        book.setAvailableCopies(book.getAvailableCopies()-1);
+        if(book.getAvailableCopies() > 0){
+            book.setAvailableCopies(book.getAvailableCopies()-1);
+        }
+//        if(book.getAvailableCopies() == 0){
+//            this.delete(id);
+//        }
         bookRepository.save(book);
         return Optional.of(book);
     }
